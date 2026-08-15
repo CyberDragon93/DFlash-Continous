@@ -1,0 +1,2 @@
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 10 --max-new 256 --steps 1 --candidates 4 --cand-noise 0.3 --out runs/rcf_v1/sanity_bof4.json
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 10 --max-new 256 --steps 1 --candidates 1 --out runs/rcf_v1/sanity_bof1.json

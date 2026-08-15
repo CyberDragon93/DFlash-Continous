@@ -1,0 +1,4 @@
+--draft runs/elf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --out runs/elf_v2/eval_gsm8k_k1.json
+--draft runs/elf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 2 --out runs/elf_v2/eval_gsm8k_k2.json
+--draft runs/elf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 4 --out runs/elf_v2/eval_gsm8k_k4.json
+--draft runs/elf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 4 --sde-gamma 1.5 --out runs/elf_v2/eval_gsm8k_k4_sde.json

@@ -1,0 +1,11 @@
+runs/
+data/
+logs/
+dflash/
+cache/
+*.pdf
+dflash_paper.txt
+ref_2605.10938.txt
+__pycache__/
+*.pyc
+.DS_Store

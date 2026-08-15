@@ -1,0 +1,8 @@
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 1 --out runs/rcf_v2/eval_gsm8k_n1.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 2 --cand-noise 0.7 --out runs/rcf_v2/eval_gsm8k_n2.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 4 --cand-noise 0.7 --out runs/rcf_v2/eval_gsm8k_n4.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 8 --cand-noise 0.7 --out runs/rcf_v2/eval_gsm8k_n8.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 4 --cand-noise 0.5 --out runs/rcf_v2/eval_gsm8k_n4_s05.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 4 --cand-noise 1.0 --out runs/rcf_v2/eval_gsm8k_n4_s10.json
+--draft runs/rcf_v2/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 1 --candidates 1 --out runs/rcf_v2/eval_math500_n1.json
+--draft runs/rcf_v2/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 1 --candidates 4 --cand-noise 0.7 --out runs/rcf_v2/eval_math500_n4.json

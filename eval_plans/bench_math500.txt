@@ -1,0 +1,5 @@
+--draft z-lab/Qwen3-4B-DFlash-b16 --dataset math500 --n 400 --max-new 1024  --out runs/bench/zlab_math500.json
+--draft runs/mask_ws/ckpt.pt --dataset math500 --n 400 --max-new 1024  --out runs/bench/mask_ws_math500.json
+--draft runs/rcf_v2/ckpt.pt --dataset math500 --n 400 --max-new 1024  --out runs/bench/rcf_v2_k1_math500.json
+--draft runs/mask_ws/ckpt.pt --dataset math500 --n 400 --max-new 1024 --candidates 16 --cand-mode sample --cand-temp 0.8 --out runs/bench/mask_ws_n16_math500.json
+--draft runs/rcf_v2/ckpt.pt --dataset math500 --n 400 --max-new 1024 --candidates 16 --cand-mode sample --cand-temp 0.8 --out runs/bench/rcf_v2_n16_math500.json

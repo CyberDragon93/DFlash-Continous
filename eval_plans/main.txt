@@ -1,0 +1,16 @@
+--draft runs/mask_scratch/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --out runs/mask_scratch/eval_gsm8k.json
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --out runs/mask_ws/eval_gsm8k.json
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --out runs/rcf_v1/eval_gsm8k_k1.json
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 2 --out runs/rcf_v1/eval_gsm8k_k2.json
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 4 --out runs/rcf_v1/eval_gsm8k_k4.json
+--draft runs/elf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --out runs/elf_v1/eval_gsm8k_k1.json
+--draft runs/elf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 2 --out runs/elf_v1/eval_gsm8k_k2.json
+--draft runs/elf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 4 --out runs/elf_v1/eval_gsm8k_k4.json
+--draft runs/mask_scratch/ckpt.pt --dataset math500 --n 100 --max-new 1024 --out runs/mask_scratch/eval_math500.json
+--draft runs/mask_ws/ckpt.pt --dataset math500 --n 100 --max-new 1024 --out runs/mask_ws/eval_math500.json
+--draft runs/rcf_v1/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 1 --out runs/rcf_v1/eval_math500_k1.json
+--draft runs/rcf_v1/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 2 --out runs/rcf_v1/eval_math500_k2.json
+--draft runs/rcf_v1/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 4 --out runs/rcf_v1/eval_math500_k4.json
+--draft runs/elf_v1/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 1 --out runs/elf_v1/eval_math500_k1.json
+--draft runs/elf_v1/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 2 --out runs/elf_v1/eval_math500_k2.json
+--draft runs/elf_v1/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 4 --out runs/elf_v1/eval_math500_k4.json

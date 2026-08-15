@@ -1,0 +1,7 @@
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --candidates 8 --cand-mode sample --cand-temp 0.8 --out runs/mask_ws/eval_gsm8k_n8_sample.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 16 --cand-mode sample --cand-temp 0.8 --out runs/rcf_v2/eval_gsm8k_n16_sample.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 32 --cand-mode sample --cand-temp 0.8 --out runs/rcf_v2/eval_gsm8k_n32_sample.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 8 --cand-mode sample --cand-temp 1.0 --out runs/rcf_v2/eval_gsm8k_n8_sampleT10.json
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 1 --candidates 8 --cand-mode sample --cand-temp 0.8 --out runs/rcf_v1/eval_gsm8k_n8_sample.json
+--draft runs/rcf_v2/ckpt.pt --dataset math500 --n 100 --max-new 1024 --steps 1 --candidates 8 --cand-mode sample --cand-temp 0.8 --out runs/rcf_v2/eval_math500_n8_sample.json
+--draft z-lab/Qwen3-4B-DFlash-b16 --dataset gsm8k --n 200 --max-new 1024 --candidates 8 --cand-mode sample --cand-temp 0.8 --out runs/ref_zlab_gsm8k_n8_sample.json

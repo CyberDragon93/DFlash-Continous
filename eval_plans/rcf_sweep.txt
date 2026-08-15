@@ -1,0 +1,4 @@
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 2 --rcf-harden --out runs/rcf_v1/eval_gsm8k_k2_harden.json
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 2 --T-r-override 0.5 --out runs/rcf_v1/eval_gsm8k_k2_tr05.json
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 3 --out runs/rcf_v1/eval_gsm8k_k3.json
+--draft runs/rcf_v1/ckpt.pt --dataset gsm8k --n 200 --max-new 1024 --steps 8 --out runs/rcf_v1/eval_gsm8k_k8.json
