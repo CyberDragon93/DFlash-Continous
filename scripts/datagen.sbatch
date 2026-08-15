@@ -7,7 +7,7 @@
 #SBATCH --wckey=YOUR_WCKEY
 #SBATCH --requeue
 #SBATCH -J cflow_datagen
-#SBATCH -o ${PROJECT_DIR:?set PROJECT_DIR}/logs/%x_%j.out
+#SBATCH -o logs/%x_%j.out
 
 set -uo pipefail
 BASE=${PROJECT_DIR:?set PROJECT_DIR}

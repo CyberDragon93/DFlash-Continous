@@ -7,7 +7,7 @@
 #SBATCH --wckey=YOUR_WCKEY
 #SBATCH --requeue
 #SBATCH -J cflow_eval
-#SBATCH -o ${PROJECT_DIR:?set PROJECT_DIR}/logs/%x_%j.out
+#SBATCH -o logs/%x_%j.out
 
 # Usage: sbatch --export=ALL,PLAN=eval_plans/foo.txt scripts/eval.sbatch
 # PLAN file: one cflow.eval_tau arg-string per line, e.g.

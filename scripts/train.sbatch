@@ -7,7 +7,7 @@
 #SBATCH --wckey=YOUR_WCKEY
 #SBATCH --requeue
 #SBATCH -J cflow_train
-#SBATCH -o ${PROJECT_DIR:?set PROJECT_DIR}/logs/%x_%j.out
+#SBATCH -o logs/%x_%j.out
 
 # Usage: sbatch --export=ALL,NAME=flow_v1,MODE=flow,EXTRA="--epochs 6" [-J name] scripts/train.sbatch
 set -uo pipefail
