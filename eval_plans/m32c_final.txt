@@ -1,0 +1,8 @@
+--draft runs/mask32_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --out runs/mask32_commit/eval_det.json
+--draft runs/mask32_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 32 --cand-mode branch-recomplete --branch-J 31 --branch-topk 1 --out runs/mask32_commit/eval_brc_n32.json
+--draft runs/mask32_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 64 --cand-mode branch-recomplete --branch-J 31 --branch-topk 2 --out runs/mask32_commit/eval_brc_n64.json
+--draft runs/mask32_commit/ckpt.pt --dataset math500 --n 100 --max-new 512 --candidates 32 --cand-mode branch-recomplete --branch-J 31 --branch-topk 1 --out runs/mask32_commit/eval_brc_math500.json
+--draft runs/mask32_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode branch-recomplete --branch-J 15 --branch-topk 1 --out runs/mask32_commit/eval_brc_n16.json
+--draft runs/mask32_commit/ckpt.pt --dataset humaneval --n 164 --max-new 512 --candidates 32 --cand-mode branch-recomplete --branch-J 31 --branch-topk 1 --out runs/mask32_commit/eval_brc_humaneval.json
+--draft runs/mask32_commit/ckpt.pt --dataset mtbench --n 80 --max-new 512 --candidates 32 --cand-mode branch-recomplete --branch-J 31 --branch-topk 1 --out runs/mask32_commit/eval_brc_mtbench.json
+--draft runs/mask32_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode sample --cand-temp 0.8 --out runs/mask32_commit/eval_marginal_n16.json

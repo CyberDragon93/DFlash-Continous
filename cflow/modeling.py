@@ -195,13 +195,16 @@ class CFlowDraftModel(nn.Module):
         with torch.no_grad():
             self.time_mlp[-1].bias.copy_(mask_emb.to(self.time_mlp[-1].bias.dtype))
 
-    def build_rcf_inputs(self, x, sc, t, anchor_emb):
+    def build_rcf_inputs(self, x, sc, t, anchor_emb, commit_mask=None, commit_emb=None):
         """x, sc: [B, A, S, D] raw-embedding-space states (slot 0 ignored);
-        t: [B, A]; anchor_emb: [B, A, D]. Returns [B, A*S, D]."""
+        t: [B, A]; anchor_emb: [B, A, D]. commit_mask [B, A, S] slots get the
+        clean commit_emb [B, A, S, D] (bypassing state+TE). Returns [B, A*S, D]."""
         B, A, S_, D = x.shape
         w_dtype = self.time_mlp[0].weight.dtype
         te = self.time_mlp(timestep_embedding(t, 256).to(w_dtype))       # [B, A, D]
         slot = x + te.unsqueeze(2).to(x.dtype) + self.w_sc(sc)
+        if commit_mask is not None:
+            slot = torch.where(commit_mask[..., None], commit_emb.to(slot.dtype), slot)
         inp = torch.cat([anchor_emb.unsqueeze(2), slot[:, :, 1:, :]], dim=2)
         return inp.reshape(B, A * S_, D)
 
@@ -240,7 +243,8 @@ class CFlowDraftModel(nn.Module):
 
     def forward(self, block_inputs, target_hidden, anchors, t=None, mode_ids=None,
                 flow_z=None, flow_sc=None, anchor_emb=None,
-                rcf_x=None, rcf_sc=None, rcf_t=None):
+                rcf_x=None, rcf_sc=None, rcf_t=None,
+                rcf_commit_mask=None, rcf_commit_emb=None):
         """Training entry point. Pass ONE of: block_inputs ([B, A*S, D],
         embedding scale — mask mode), flow_z/flow_sc (ELF flow mode), or
         rcf_x/rcf_sc/rcf_t (RCF mode). Input construction happens inside so
@@ -248,7 +252,9 @@ class CFlowDraftModel(nn.Module):
         if flow_z is not None:
             block_inputs = self.build_flow_inputs(flow_z, flow_sc, anchor_emb, self.block_size)
         elif rcf_x is not None:
-            block_inputs = self.build_rcf_inputs(rcf_x, rcf_sc, rcf_t, anchor_emb)
+            block_inputs = self.build_rcf_inputs(rcf_x, rcf_sc, rcf_t, anchor_emb,
+                                                 commit_mask=rcf_commit_mask,
+                                                 commit_emb=rcf_commit_emb)
             t = None  # time enters via TE inside build_rcf_inputs only
         h = self.forward_blocks(block_inputs, target_hidden, anchors, t, mode_ids)
         z_hat = self.flow_head(h) if self.mode == "flow" else None

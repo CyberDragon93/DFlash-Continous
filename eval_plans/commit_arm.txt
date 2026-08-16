@@ -1,0 +1,4 @@
+--draft runs/mask_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --out runs/mask_commit/eval_gsm8k_det.json
+--draft runs/mask_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode branch-recomplete --branch-J 5 --branch-topk 3 --out runs/mask_commit/eval_brc_n16.json
+--draft runs/mask_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode sample --cand-temp 0.8 --out runs/mask_commit/eval_marginal_n16.json
+--draft runs/mask_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode branch-recomplete --branch-J 15 --branch-topk 1 --out runs/mask_commit/eval_brc_j15.json

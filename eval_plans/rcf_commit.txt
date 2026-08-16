@@ -1,0 +1,3 @@
+--draft runs/rcf_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --steps 1 --out runs/rcf_commit/eval_det.json
+--draft runs/rcf_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --steps 1 --candidates 16 --cand-mode branch-recomplete --branch-J 15 --branch-topk 1 --out runs/rcf_commit/eval_brc_n16.json
+--draft runs/rcf_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --steps 1 --candidates 32 --cand-mode branch-recomplete --branch-J 15 --branch-topk 2 --out runs/rcf_commit/eval_brc_n32.json

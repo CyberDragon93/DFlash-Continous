@@ -82,23 +82,48 @@ def parse_args():
                     help="fraction of pass-1 blocks whose x0 is embedding-scale noise instead of 0")
     ap.add_argument("--pass1-noise-scale", type=float, default=0.7,
                     help="noise std as a multiple of the embedding-matrix RMS")
+    # fork/commit: teach the drafter to CONTINUE a committed in-block prefix
+    ap.add_argument("--commit-prob", type=float, default=0.0,
+                    help="per-block prob of committing a true prefix of the block")
+    ap.add_argument("--commit-len-max", type=int, default=12)
+    ap.add_argument("--commit-len-mean", type=float, default=5.0)
     return ap.parse_args()
 
 
+def sample_commit(B, A, S, offs, args, device):
+    """Returns (keep_clean [B,A,S] bool, w [B,A,S] float): committed offsets
+    keep true-token embeddings and get zero loss weight; position decay
+    restarts after the commit."""
+    sel = torch.rand(B, A, device=device) < args.commit_prob
+    u = torch.rand(B, A, device=device).clamp(min=1e-6)
+    geo = (torch.log(u) / torch.log(torch.tensor(1.0 - 1.0 / args.commit_len_mean, device=device))).long() + 1
+    c = torch.where(sel, geo.clamp(1, args.commit_len_max), torch.zeros_like(geo))
+    o = offs.view(1, 1, S)
+    keep_clean = o <= c[..., None]                      # offsets 1..c clean (offset 0 = anchor anyway)
+    rel = (o - c[..., None] - 1).float()
+    w = torch.exp(-rel.clamp(min=0.0) / args.gamma) * (o > c[..., None]).float()
+    w[:, :, 0] = 0.0
+    return keep_clean, w
+
+
 def load_warm_start(draft, spec, device):
-    """Load released DFlash trunk weights (layers/fc/hidden_norm/norm)."""
+    """Load trunk weights from 'zlab', a safetensors dir, or one of our
+    ckpt.pt files."""
     import glob
     import os
-    from huggingface_hub import snapshot_download
-    from safetensors.torch import load_file
-    local = snapshot_download("z-lab/Qwen3-4B-DFlash-b16") if spec == "zlab" else spec
-    sd = {}
-    for fp in glob.glob(os.path.join(local, "*.safetensors")):
-        sd.update(load_file(fp))
+    if spec.endswith(".pt"):
+        ck = torch.load(spec, map_location="cpu", weights_only=False)
+        sd = ck["model"]
+    else:
+        from huggingface_hub import snapshot_download
+        from safetensors.torch import load_file
+        local = snapshot_download("z-lab/Qwen3-4B-DFlash-b16") if spec == "zlab" else spec
+        sd = {}
+        for fp in glob.glob(os.path.join(local, "*.safetensors")):
+            sd.update(load_file(fp))
     missing, unexpected = draft.load_state_dict(sd, strict=False)
     assert not unexpected, f"unexpected keys: {unexpected[:5]}"
-    loaded = len(sd)
-    return loaded, [m for m in missing]
+    return len(sd), [m for m in missing]
 
 
 def build_blocks(input_ids, seq_lens, prompt_lens, A, S):
@@ -259,13 +284,24 @@ def main():
             if args.mode == "mask":
                 inputs = emb.clone()
                 inputs[:, :, 1:, :] = mask_emb.to(emb.dtype)
+                if args.commit_prob > 0:
+                    offs_t = torch.arange(S, device=device)
+                    keep_clean, w_commit = sample_commit(B, A, S, offs_t, args, device)
+                    # committed offsets: true-token embeddings, but only where
+                    # the position is in-range (overhang stays mask)
+                    kc = keep_clean & pos_valid
+                    inputs = torch.where(kc[..., None], emb, inputs)
                 with torch.autocast("cuda", dtype=torch.bfloat16):
                     h, _ = model(inputs.view(B, A * S, D), feats, anchors)
                     logits = F.linear(h, lm_head_w)
                 per_ce = F.cross_entropy(
                     logits.float().view(-1, logits.shape[-1]), labels.view(-1),
                     reduction="none", ignore_index=-100).view(B, A, S)
-                loss_ce = weighted_mean(per_ce, valid, offs_weight)
+                if args.commit_prob > 0:
+                    wm = w_commit * valid.float()
+                    loss_ce = (per_ce * wm).sum() / wm.sum().clamp(min=1.0)
+                else:
+                    loss_ce = weighted_mean(per_ce, valid, offs_weight)
                 loss = loss_ce
                 loss_mse_val = 0.0
             elif args.mode == "rcf":
@@ -279,15 +315,27 @@ def main():
                     noisy = (torch.rand(B, A, device=device) < args.pass1_noise_prob)
                     eps0 = torch.randn_like(emb, dtype=torch.float32) * (args.pass1_noise_scale * sigma0)
                     x0_in = (eps0 * noisy[..., None, None].float()).to(emb.dtype)
+                commit_kwargs = {}
+                w_commit = None
+                if args.commit_prob > 0:
+                    offs_t = torch.arange(S, device=device)
+                    keep_clean, w_commit = sample_commit(B, A, S, offs_t, args, device)
+                    kc = keep_clean & pos_valid
+                    commit_kwargs = dict(rcf_commit_mask=kc, rcf_commit_emb=emb)
                 # PASS 1 (t=0): identical task to the mask baseline (+ noisy-source blocks)
                 with torch.autocast("cuda", dtype=torch.bfloat16):
                     h1, _ = model(None, feats, anchors,
-                                  rcf_x=x0_in, rcf_sc=zeros_x, rcf_t=t0, anchor_emb=anchor_emb)
+                                  rcf_x=x0_in, rcf_sc=zeros_x, rcf_t=t0, anchor_emb=anchor_emb,
+                                  **commit_kwargs)
                     logits1 = F.linear(h1, lm_head_w)
                 per_ce1 = F.cross_entropy(
                     logits1.float().view(-1, logits1.shape[-1]), labels.view(-1),
                     reduction="none", ignore_index=-100).view(B, A, S)
-                loss_ce = weighted_mean(per_ce1, valid, offs_weight)
+                if w_commit is not None:
+                    wm = w_commit * valid.float()
+                    loss_ce = (per_ce1 * wm).sum() / wm.sum().clamp(min=1.0)
+                else:
+                    loss_ce = weighted_mean(per_ce1, valid, offs_weight)
                 loss = loss_ce
                 loss_mse_val = 0.0  # reused as the pass-2 CE slot below
                 # PASS 2 (rollout branch): inference states from own predictions.

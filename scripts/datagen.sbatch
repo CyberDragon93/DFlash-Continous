@@ -20,20 +20,24 @@ export TRITON_CACHE_DIR=/tmp/triton
 export VLLM_USE_FLASHINFER_SAMPLER=0
 mkdir -p "$BASE/data/gen"
 
+TEMP=${TEMP:-0.0}
+OUT=${OUT:-train_raw}
+mkdir -p "$BASE/data/gen_$OUT"
 for i in 0 1 2 3; do
   CUDA_VISIBLE_DEVICES=$i "$PY" "$BASE/cflow/data/generate_responses.py" \
     --prompts "$BASE/data/prompts.jsonl" \
-    --out "$BASE/data/gen/shard_$i.jsonl" \
+    --out "$BASE/data/gen_$OUT/shard_$i.jsonl" \
+    --temperature "$TEMP" \
     --shard "$i" --num-shards 4 \
-    > "$BASE/logs/datagen_shard_$i.log" 2>&1 &
+    > "$BASE/logs/datagen_${OUT}_shard_$i.log" 2>&1 &
 done
 wait
 
-n_done=$(ls "$BASE"/data/gen/shard_*.jsonl 2>/dev/null | wc -l)
+n_done=$(ls "$BASE"/data/gen_$OUT/shard_*.jsonl 2>/dev/null | wc -l)
 if [ "$n_done" -eq 4 ]; then
-  cat "$BASE"/data/gen/shard_*.jsonl > "$BASE/data/train_raw.jsonl.tmp"
-  mv "$BASE/data/train_raw.jsonl.tmp" "$BASE/data/train_raw.jsonl"
-  wc -l "$BASE/data/train_raw.jsonl"
+  cat "$BASE"/data/gen_$OUT/shard_*.jsonl > "$BASE/data/$OUT.jsonl.tmp"
+  mv "$BASE/data/$OUT.jsonl.tmp" "$BASE/data/$OUT.jsonl"
+  wc -l "$BASE/data/$OUT.jsonl"
 else
   echo "only $n_done/4 shards complete; requeue will resume"
   exit 1

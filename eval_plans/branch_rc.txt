@@ -1,0 +1,2 @@
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode branch-recomplete --branch-J 5 --branch-topk 3 --out runs/mask_ws/probe_branchrc_n16.json
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode branch-recomplete --branch-J 15 --branch-topk 1 --out runs/mask_ws/probe_branchrc_j15.json

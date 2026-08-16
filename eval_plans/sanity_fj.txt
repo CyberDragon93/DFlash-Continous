@@ -1,0 +1,2 @@
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 50 --max-new 512 --steps 1 --candidates 8 --cand-mode flow-joint --sampler-ckpt runs/elf_v2/ckpt.pt --sampler-steps 2 --out runs/rcf_v2/sanity_fj8.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 50 --max-new 512 --steps 1 --candidates 8 --cand-mode sample --cand-temp 0.8 --out runs/rcf_v2/sanity_ms8.json

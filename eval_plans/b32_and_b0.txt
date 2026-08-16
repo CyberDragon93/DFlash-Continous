@@ -1,0 +1,8 @@
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --out runs/mask_ws/eval_gsm8k_512.json
+--draft runs/mask_32/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --out runs/mask_32/eval_gsm8k.json
+--draft runs/mask32_g7/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --out runs/mask32_g7/eval_gsm8k.json
+--draft runs/rcf_32/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --steps 1 --out runs/rcf_32/eval_gsm8k_k1.json
+--draft runs/rcf_32/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --steps 2 --out runs/rcf_32/eval_gsm8k_k2.json
+--draft runs/mask_32/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode sample --cand-temp 0.8 --out runs/mask_32/eval_gsm8k_n16.json
+--draft runs/mask_32/ckpt.pt --dataset math500 --n 100 --max-new 512 --out runs/mask_32/eval_math500.json
+--draft runs/mask_t08/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --out runs/mask_t08/eval_gsm8k.json

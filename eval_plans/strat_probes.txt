@@ -1,0 +1,4 @@
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode strat --cand-temp 0.8 --out runs/mask_ws/probe_strat_n16.json
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode sample --cand-temp-schedule 0.4,1.2 --out runs/mask_ws/probe_revanneal_n16.json
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 32 --cand-mode strat --cand-temp 0.8 --out runs/mask_ws/probe_strat_n32.json
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode sample --cand-temp 0.6 --out runs/mask_ws/probe_t06_n16.json

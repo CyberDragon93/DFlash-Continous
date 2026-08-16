@@ -1,0 +1,4 @@
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode sample --cand-temp-schedule 0.9,0.2 --out runs/mask_ws/probe_anneal_n16.json
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode branch --branch-J 5 --branch-topk 3 --out runs/mask_ws/probe_branch_n16.json
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode sample --cand-temp 0.8 --out runs/mask_ws/probe_marginal_n16_512.json
+--draft runs/mask_ws/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 16 --cand-mode branch --branch-J 15 --branch-topk 1 --out runs/mask_ws/probe_branch_j15k1.json

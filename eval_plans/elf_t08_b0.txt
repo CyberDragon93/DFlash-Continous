@@ -1,0 +1,3 @@
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 50 --max-new 512 --steps 1 --candidates 16 --cand-mode flow-joint --sampler-ckpt runs/elf_t08/ckpt.pt --sampler-steps 2 --out runs/elf_t08/b0_fj16.json
+--draft runs/elf_t08/ckpt.pt --dataset gsm8k --n 50 --max-new 512 --steps 2 --out runs/elf_t08/b0_k2_fidelity.json
+--draft runs/rcf_v2/ckpt.pt --dataset gsm8k --n 50 --max-new 512 --steps 1 --candidates 16 --cand-mode flow-joint --sampler-ckpt runs/elf_t08/ckpt.pt --sampler-steps 3 --out runs/elf_t08/b0_fj16_s3.json

@@ -1,0 +1,4 @@
+--draft runs/mask_commit/ckpt.pt --dataset math500 --n 100 --max-new 512 --candidates 16 --cand-mode branch-recomplete --branch-J 15 --branch-topk 1 --out runs/mask_commit/eval_brc_math500.json
+--draft runs/mask_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 32 --cand-mode branch-recomplete --branch-J 15 --branch-topk 2 --out runs/mask_commit/eval_brc_n32k2.json
+--draft runs/mask_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 31 --cand-mode branch-recomplete --branch-J 15 --branch-topk 1 --out runs/mask_commit/eval_brc_n31_dummy.json
+--draft runs/mask_commit/ckpt.pt --dataset gsm8k --n 200 --max-new 512 --candidates 8 --cand-mode branch-recomplete --branch-J 7 --branch-topk 1 --out runs/mask_commit/eval_brc_n8j7.json
